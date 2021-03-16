@@ -1,0 +1,17 @@
+**/__pycache__
+**/*.pyc
+**/.ipynb_checkpoints
+**/*.slides.html
+.idea
+sympkf_*.tgz
+
+# Documentation
+sympkf/doc_sphinx/*
+
+# build
+build/
+dist/
+sympkf.egg-info/
+
+# swap files
+**/.*.swp
