@@ -9,7 +9,7 @@ univariate parametric Kalman filter dynamics](https://github.com/opannekoucke/sy
   - [PKF for the 2D advection](#pkf-for-the-2d-advection)
   - [Illustration of the PKF applied on a system of evolution equation](#illustration-of-the-pkf-applied-on-a-system-of-evolution-equation)
 - [Install](#install)
-- [Citation <a id='cite'/>](#citation-a-idcite)
+- [Citation](#citation)
 
 Introduction
 ------------
@@ -30,8 +30,7 @@ introduced to perform numerical simulations. A final multivariate example
 illustrates the potential of SymPKF to go beyond the univariate case.
 
 
-
-  - Olivier Pannekoucke "[ XXX ](https://arxiv.org/abs/XXXXX.XXXXX)." arXiv preprint arXiv:XXXX.XXXXX (2020).
+  - [O. Pannekoucke and P. Arbogast, “SymPKF: a symbolic and computational toolbox for the design of univariate parametric Kalman filter dynamics”  arXiv preprint (2021)](https://arxiv.org/abs/2103.09226)..
 
 
 Example
@@ -104,10 +103,17 @@ Install
  1. Examples are given as jupyter notebooks (see ./example/) 
 
 
-Citation <a id='cite'/>
------------------------
+Citation
+--------
 
- PUT ARXIV REF HERE .. 
+ @misc{pannekoucke2021sympkf,
+      title={SymPKF: a symbolic and computational toolbox for the design of univariate parametric Kalman filter dynamics}, 
+      author={Olivier Pannekoucke and Philippe Arbogast},
+      year={2021},
+      eprint={2103.09226},
+      archivePrefix={arXiv},
+      primaryClass={physics.data-an}
+}
 
 [Meurer2017]: https://doi.org/10.7717/peerj-cs.103 "A. Meurer et al., “SymPy: symbolic computing in Python,” PeerJ Computer Science, vol. 3, p. e103, Jan. 2017, doi: 10.7717/peerj-cs.103."
 [PDE-NetGen]: https://github.com/opannekoucke/pdenetgen "PDE-NetGen : from symbolic PDE representations of physical processes to trainable neural network representations"
