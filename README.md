@@ -106,6 +106,7 @@ Install
 Citation
 --------
 
+```
  @misc{pannekoucke2021sympkf,
       title={SymPKF: a symbolic and computational toolbox for the design of univariate parametric Kalman filter dynamics}, 
       author={Olivier Pannekoucke and Philippe Arbogast},
@@ -114,6 +115,7 @@ Citation
       archivePrefix={arXiv},
       primaryClass={physics.data-an}
 }
+```
 
 [Meurer2017]: https://doi.org/10.7717/peerj-cs.103 "A. Meurer et al., “SymPy: symbolic computing in Python,” PeerJ Computer Science, vol. 3, p. e103, Jan. 2017, doi: 10.7717/peerj-cs.103."
 [PDE-NetGen]: https://github.com/opannekoucke/pdenetgen "PDE-NetGen : from symbolic PDE representations of physical processes to trainable neural network representations"
