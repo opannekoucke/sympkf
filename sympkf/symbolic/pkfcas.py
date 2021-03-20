@@ -1,6 +1,7 @@
 from .random import Expectation, omega
 from .util import PDESystem, Eq, remove_eval_derivative, upper_triangle
 from .tool import clean_latex_name
+from .constants import t
 import collections
 
 
@@ -25,8 +26,6 @@ def _eval_Abs(self):
         return self
 
 setattr(Function, '_eval_Abs', _eval_Abs)
-
-t = symbols('t')
 
 class SymbolicPKF(object):
     """ Parametric dynamics associated to a given system of evolution equations
@@ -381,7 +380,7 @@ class SymbolicPKF(object):
 
         else:
 
-            t =self.time_coordinate
+            t = self.time_coordinate
 
             subs_epsilon_trends = {
                 eq.args[0]: eq.args[1] for eq in self.epsilon_system

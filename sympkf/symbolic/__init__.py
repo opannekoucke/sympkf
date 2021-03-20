@@ -1,4 +1,5 @@
 try:
+    from .constants import t
     from .random import *
     from .pkfcas import *
     from .util import *
