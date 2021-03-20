@@ -4,6 +4,7 @@
 
 from sympy import Derivative, Function, Symbol, symbols, Add
 from .tool import clean_latex_name
+from .constants import t as time_symbol
 import sympy
 
 
@@ -119,7 +120,7 @@ class PDESystem(object):
     """ Symbolic system of partial differential equations
     """
 
-    _time_symbol = symbols('t')
+    _time_symbol = time_symbol
 
     def __init__(self, equations, name=''):
 
