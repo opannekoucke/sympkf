@@ -381,11 +381,12 @@ class SymbolicPKF(object):
                 
                 cross_covariance_system.append(equation)            
             
-            # Apply internal closure
+            # Apply internal closure and append to cross_covariance_system
+            self._cross_covariance_system = []
             for equation in cross_covariance_system:
                 lhs, rhs = equation.args
                 rhs = self._apply_internal_closure(rhs)                
-                self._cross_covariance_system = Eq(lhs,rhs.expand())
+                self._cross_covariance_system.append(Eq(lhs,rhs.expand()))
             
             #self._cross_covariance_system = cross_covariance_system
 
