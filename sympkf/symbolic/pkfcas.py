@@ -1,6 +1,7 @@
 from .random import Expectation, omega
 from .util import PDESystem, Eq, remove_eval_derivative, upper_triangle
 from .tool import clean_latex_name
+from .constants import t as time_symbol
 import collections
 
 
@@ -25,8 +26,6 @@ def _eval_Abs(self):
         return self
 
 setattr(Function, '_eval_Abs', _eval_Abs)
-
-t = symbols('t')
 
 class SymbolicPKF(object):
     """ Parametric dynamics associated to a given system of evolution equations
@@ -58,6 +57,7 @@ class SymbolicPKF(object):
         self._error_system = None
         self._epsilon_system = None
         self._variance_system = None
+        self._cross_covariance_system = None
         self._std_system = None
         self._metric_system = None
 
@@ -209,8 +209,8 @@ class SymbolicPKF(object):
                 error = self.fields[field].error
 
                 definition = Eq(
-                    Derivative(variance, t),
-                    Expectation(Derivative(error ** Rational(2), t), evaluate=False)
+                    Derivative(variance, time_symbol),
+                    Expectation(Derivative(error ** Rational(2), time_symbol), evaluate=False)
                 )
 
                 lhs, rhs = definition.args
@@ -244,9 +244,7 @@ class SymbolicPKF(object):
         if self._epsilon_system is not None:
             return self._epsilon_system
 
-        else:
-
-            t = self.time_coordinate
+        else:            
 
             subs_error_trend = {
                 eq.args[0]: eq.args[1] for eq in self.error_system
@@ -265,9 +263,9 @@ class SymbolicPKF(object):
                 error = self.fields[field].error
                 sqrt_variance = sympy.sqrt(self.fields[field].variance)
 
-                lhs = Derivative(epsilon, t)
+                lhs = Derivative(epsilon, time_symbol)
 
-                rhs = Derivative(error / sqrt_variance, t).doit()
+                rhs = Derivative(error / sqrt_variance, time_symbol).doit()
                 rhs = rhs.subs(subs_error_trend).doit()
                 rhs = rhs.subs(subs_variance_trend).doit()
                 rhs = rhs.subs(subs_error).doit()
@@ -293,8 +291,7 @@ class SymbolicPKF(object):
             return self._std_system
 
         else:
-            # Compute the std system
-            t = self.time_coordinate
+            # Compute the std system            
 
             subs_variance = {
                 self.fields[field].variance: self.fields[field].std ** Integer(2)
@@ -308,7 +305,7 @@ class SymbolicPKF(object):
                 # Extract trends
                 trends = equation.args[0].atoms(Derivative)
                 for trend in trends:
-                    if t == trend.args[1]:
+                    if time_symbol == trend.args[1]:
                         break
                 equation = equation.isolate(trend)
                 std_system.append(equation)
@@ -318,6 +315,61 @@ class SymbolicPKF(object):
             return self._std_system
 
     @property
+    def multivariate_couples(self):
+        """ Return couples of multivariate fields """
+        fields = list(self.fields.keys())
+        couples = ( (f1, f2) for i,f1 in enumerate(fields) for j,f2 in enumerate(fields) if i<j )
+        return couples
+
+
+    @property
+    def cross_covariance_system(self):
+        """ Return the dynamics of the cross-covariance in multivariate situations """
+        if self._cross_covariance_system is not None:
+            return self._cross_covariance_system
+
+        elif len(list(self.fields.keys()))==1:
+            # Univariate situation            
+            return None
+
+        else:
+            # Compute the cross-covariance system
+
+            # Set substution dictionnary
+            subs_error_trends = {equation.args[0]: equation.args[1] for equation in self.error_system}
+            subs_error_to_epsilon = {
+                self.fields[field].error: self.fields[field].epsilon * sqrt(self.fields[field].variance)
+                for field in self.fields
+            }
+        
+
+            # Set the cross-covariance meta-data and compute the cros-covariance dynamics 
+            self._cross_covariance_system = []
+            
+            for couple in self.multivariate_couples:
+                # 1) Extract fields and meta-data
+                f1, f2 = couple        
+                mf1, mf2 = self.fields[f1], self.fields[f2] 
+
+                # 2) extract error fields
+                e1, e2 = mf1.error, mf2.error                                                
+                V12 = self.internal_closure[Expectation(e1*e2)]
+
+                # 3) Definition and computation of the dynamics
+                lhs = Derivative(V12, time_symbol)
+                rhs = Expectation(Derivative(e1*e2, time_symbol).doit()).subs(subs_error_trends)
+                rhs = rhs.subs(subs_error_to_epsilon).doit()
+                #.. todo ??:
+                #  should include substitution from 'epsilon' in place of 'error'
+
+                rhs = self._apply_internal_closure(rhs)                
+
+                # 4) update of the cross-covariance system
+                self._cross_covariance_system.append( Eq(lhs,rhs.expand()) )
+                
+            return self._cross_covariance_system
+
+    @property
     def metric_system(self):
         """ Return the dynamics of the metric using the variances (not the stds) """
         if self._metric_system is not None:
@@ -325,7 +377,7 @@ class SymbolicPKF(object):
 
         else:
 
-            t =self.time_coordinate
+            #t = self.time_coordinate
 
             subs_epsilon_trends = {
                 eq.args[0]: eq.args[1] for eq in self.epsilon_system
@@ -341,14 +393,14 @@ class SymbolicPKF(object):
                             continue
 
                         # Set the lhs: D_t g_ij
-                        lhs = Derivative(meta_field.metric_func(i,j), t)
+                        lhs = Derivative(meta_field.metric_func(i,j), time_symbol)
 
                         # Compute the rhs: E[ D_t(D_i eps D_j eps)]
                         #  - Definition of the rhs
                         rhs = Expectation(
                                     Derivative(
                                         Derivative(meta_field.epsilon,xi)*Derivative(meta_field.epsilon,xj)
-                                    ,t).doit()
+                                    ,time_symbol).doit()
                                     )
                         # Substitutes the trends of error
                         rhs = rhs.subs(subs_epsilon_trends).doit()
@@ -372,7 +424,18 @@ class SymbolicPKF(object):
             # Compute the expectation system
             full_system_in_metric = []
 
-            for system in [self.expectation_system, self.variance_system, self.metric_system]:
+            systems = [
+                        self.expectation_system, 
+                        self.variance_system, 
+                        self.cross_covariance_system, 
+                        self.metric_system
+                    ] 
+            
+            for system in systems:
+
+                if system is None: # to handle the multivariate situation: None is for univariate
+                    continue
+                
                 # 1. Closes the system (by default closure is the empty dictionary {})
                 if self.closure != {}:
                     closed_system = []
@@ -490,9 +553,7 @@ class SymbolicPKF(object):
 
         """
 
-        if self._system_in_aspect is None:
-
-            t = self.time_coordinate
+        if self._system_in_aspect is None:            
 
             # 1. Set dictionary for substitution
 
@@ -514,7 +575,17 @@ class SymbolicPKF(object):
 
             #  2. Migration of expectation and variance systems
             aspect_system = []
-            for system in [self.expectation_system, self.variance_system]:
+
+            systems = [ self.expectation_system, 
+                        self.variance_system, 
+                        self.cross_covariance_system
+                    ]
+
+            for system in systems:
+                
+                if system is None: # to handle the multivariate situation: None is for univariate
+                    continue
+
                 # -1- apply external closure
                 system = self._apply_closure(system)
                 # -2- switch from metric to diffusion
@@ -525,18 +596,21 @@ class SymbolicPKF(object):
             # 3. Computation of the system at a symbolic level
             #     forms the equation $$ \pdt \bs = - \bs \pdt g \bs $$
             #     The computation of the system is made as a loop over univariate fields
+
+            #t = self.time_coordinate
+
             for mfield in self.fields.values():
                 # Extract tensors
                 aspect = mfield.aspect
                 metric = mfield.metric
 
                 # Computation of the rhs: $- \bs \pdt g \bs$
-                trend_metric = Derivative(metric, t).doit()
+                trend_metric = Derivative(metric, time_symbol).doit()
                 rhs = - aspect * trend_metric * aspect
                 rhs = rhs.doit()
 
                 # Computation of the lhs: $\pdt \bs$
-                lhs = Derivative(aspect, t).doit()
+                lhs = Derivative(aspect, time_symbol).doit()
 
                 # Set the system by substituting terms
                 for lhs_term, rhs_term in zip(upper_triangle(lhs), upper_triangle(rhs)):
@@ -594,9 +668,40 @@ class SymbolicPKF(object):
     @property
     def internal_closure(self):
         if self._internal_closure is None:
+
             self._internal_closure = {}
+
+            # 1. Set univariate closure
             for meta_field in self.fields.values():
                 self._internal_closure.update(meta_field.internal_closure)
+            
+            # 2. Set multivariate closure (only in multivariate situations)           
+            for couple in self.multivariate_couples:
+                # 1) Extract fields and meta-data
+                f1, f2 = couple        
+                mf1, mf2 = self.fields[f1], self.fields[f2] 
+
+                # 2) extract error fields
+                e1, e2 = mf1.error, mf2.error
+                V1, V2 = mf1.variance, mf2.variance
+                std1, std2 = sqrt(V1), sqrt(V2)
+                eps1, eps2 = mf1.epsilon, mf2.epsilon
+
+                # 3) Definition of the cross_variance
+                
+                # 3.a) Selection of the coordinates
+                # .. todo: 
+                #   Modify the selection of the coordinates to account of two-point covariances between surface / volumique fields
+                # this could be made from the cup product of the coordinates mf1.coordinates and mf2.coordinates
+                # e.g. f1(t,x) f2(t,x,y) => V12(t,x,y) ??
+                coordinates = mf1.coordinates 
+                
+                # 3.b) Set name and definition
+                V12 = Function('V_'+f1.name+f2.name)(*coordinates)
+
+                # 3.c) Update internal closure
+                self._internal_closure[Expectation(e1*e2)] = V12
+                self._internal_closure[Expectation(eps1*eps2)] = V12/(std1*std2)
 
         return self._internal_closure
 
@@ -787,7 +892,7 @@ class Field(object):
         self.code = clean_latex_name(field.func)
 
         self.coordinates = field.args
-        self.spatial_coordinates = tuple([coord for coord in self.coordinates if coord is not t])
+        self.spatial_coordinates = tuple([coord for coord in self.coordinates if coord is not time_symbol])
 
         self.coords_code = tuple(clean_latex_name(coord) for coord in self.coordinates)
         self.spatial_coords_code = tuple(clean_latex_name(coord) for coord in self.spatial_coordinates)
@@ -812,13 +917,13 @@ class Field(object):
 
         # --trends
         self.trends = {
-                    'field':Derivative(self.value,t),
-                    'variance':Derivative(self.variance,t),
-                    'error': Derivative(self.error, t),
-                    'epsilon': Derivative(self.epsilon, t),
-                    'metric': Derivative(self.metric, t),
-                    'diffusion': Derivative(self.diffusion, t),
-                    'aspect': Derivative(self.aspect, t),
+                    'field':Derivative(self.value,time_symbol),
+                    'variance':Derivative(self.variance,time_symbol),
+                    'error': Derivative(self.error, time_symbol),
+                    'epsilon': Derivative(self.epsilon, time_symbol),
+                    'metric': Derivative(self.metric, time_symbol),
+                    'diffusion': Derivative(self.diffusion, time_symbol),
+                    'aspect': Derivative(self.aspect, time_symbol),
         }
 
         self.subs_tree = UnivariateTree(self.epsilon, self.spatial_coordinates)
