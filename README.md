@@ -30,7 +30,7 @@ introduced to perform numerical simulations. A final multivariate example
 illustrates the potential of SymPKF to go beyond the univariate case.
 
 
-  - [O. Pannekoucke and P. Arbogast, “SymPKF: a symbolic and computational toolbox for the design of univariate parametric Kalman filter dynamics”  arXiv preprint (2021)](https://arxiv.org/abs/2103.09226)..
+  - [O. Pannekoucke and P. Arbogast, “SymPKF: a symbolic and computational toolbox for the design of univariate parametric Kalman filter dynamics”  arXiv preprint (2021)](https://arxiv.org/abs/2103.09226).
 
 
 Example
