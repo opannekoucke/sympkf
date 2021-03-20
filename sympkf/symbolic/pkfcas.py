@@ -58,6 +58,7 @@ class SymbolicPKF(object):
         self._error_system = None
         self._epsilon_system = None
         self._variance_system = None
+        self._cross_covariance_system = None
         self._std_system = None
         self._metric_system = None
 
@@ -318,6 +319,79 @@ class SymbolicPKF(object):
             return self._std_system
 
     @property
+    def cross_covariance_system(self):
+        """ Return the dynamics of the cross-covariance in multivariate situations """
+        if self._cross_covariance_system is not None:
+            return self._cross_covariance_system
+
+        elif len(list(self.fields.keys()))==1:
+            # Univariate situation            
+            return None
+
+        else:
+            # Compute the cross-covariance system
+
+            # Set substution dictionnary
+            subs_error_trends = {equation.args[0]: equation.args[1] for equation in self.error_system}
+            subs_error_to_epsilon = {
+                self.fields[field].error: self.fields[field].epsilon * sqrt(self.fields[field].variance)
+                for field in self.fields
+            }
+        
+
+            # Set the cross-covariance meta-data and compute the cros-covariance dynamics 
+            cross_covariance_system = []
+            fields = list(self.fields.keys())
+            couples = ( (f1, f2) for i,f1 in enumerate(fields) for j,f2 in enumerate(fields) if i<j )
+            
+            for couple in couples:
+                # 1) Extract fields and meta-data
+                f1, f2 = couple        
+                mf1, mf2 = self.fields[f1], self.fields[f2] 
+
+                # 2) extract error fields
+                e1, e2 = mf1.error, mf2.error
+                V1, V2 = mf1.variance, mf2.variance
+                std1, std2 = sqrt(V1), sqrt(V2)
+                eps1, eps2 = mf1.epsilon, mf2.epsilon
+
+                # 3) Definition of the cross_variance
+                
+                # 3.a) Selection of the coordinates
+                # .. todo: 
+                #   Modify the selection of the coordinates to account of two-point covariances between surface / volumique fields
+                # this could be made from the cup product of the coordinates mf1.coordinates and mf2.coordinates
+                # e.g. f1(t,x) f2(t,x,y) => V12(t,x,y) ??
+                coordinates = mf1.coordinates 
+                
+                # 3.b) Set name and definition
+                V12 = Function('V_'+f1.name+f2.name)(*coordinates)
+
+                # 3.c) Update internal closure
+                self._internal_closure[Expectation(e1*e2)] = V12
+                self._internal_closure[Expectation(eps1*eps2)] = V12/(std1*std2)
+
+                # 4) Definition and computation of the dynamics
+                lhs = Derivative(V12,t)
+                rhs = Expectation(Derivative(e1*e2,t).doit()).subs(subs_error_trends)
+                rhs = rhs.subs(subs_error_to_epsilon).doit()
+                equation = Eq(lhs,rhs)
+                #.. todo :
+                #  should include substitution from 'epsilon' in place of 'error'
+                
+                cross_covariance_system.append(equation)            
+            
+            # Apply internal closure
+            for equation in cross_covariance_system:
+                lhs, rhs = equation.args
+                rhs = self._apply_internal_closure(rhs)                
+                self._cross_covariance_system = Eq(lhs,rhs.expand())
+            
+            #self._cross_covariance_system = cross_covariance_system
+
+            return self._cross_covariance_system
+
+    @property
     def metric_system(self):
         """ Return the dynamics of the metric using the variances (not the stds) """
         if self._metric_system is not None:
@@ -372,7 +446,20 @@ class SymbolicPKF(object):
             # Compute the expectation system
             full_system_in_metric = []
 
-            for system in [self.expectation_system, self.variance_system, self.metric_system]:
+            systems = []
+            for system in  [
+                        self.expectation_system, 
+                        self.variance_system, 
+                        self.cross_covariance_system, 
+                        self.metric_system
+                    ]:
+                if system is None:
+                    continue
+                else:
+                    systems.append(system)
+            
+            for system in systems:
+                
                 # 1. Closes the system (by default closure is the empty dictionary {})
                 if self.closure != {}:
                     closed_system = []
@@ -514,7 +601,11 @@ class SymbolicPKF(object):
 
             #  2. Migration of expectation and variance systems
             aspect_system = []
-            for system in [self.expectation_system, self.variance_system]:
+            for system in [self.expectation_system, self.variance_system, self.cross_covariance_system]:
+                
+                if system is None:
+                    continue
+
                 # -1- apply external closure
                 system = self._apply_closure(system)
                 # -2- switch from metric to diffusion
