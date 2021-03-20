@@ -1,7 +1,7 @@
 from .random import Expectation, omega
 from .util import PDESystem, Eq, remove_eval_derivative, upper_triangle
 from .tool import clean_latex_name
-from .constants import t
+from .constants import t as time_symbol
 import collections
 
 
@@ -209,8 +209,8 @@ class SymbolicPKF(object):
                 error = self.fields[field].error
 
                 definition = Eq(
-                    Derivative(variance, t),
-                    Expectation(Derivative(error ** Rational(2), t), evaluate=False)
+                    Derivative(variance, time_symbol),
+                    Expectation(Derivative(error ** Rational(2), time_symbol), evaluate=False)
                 )
 
                 lhs, rhs = definition.args
@@ -244,9 +244,7 @@ class SymbolicPKF(object):
         if self._epsilon_system is not None:
             return self._epsilon_system
 
-        else:
-
-            t = self.time_coordinate
+        else:            
 
             subs_error_trend = {
                 eq.args[0]: eq.args[1] for eq in self.error_system
@@ -265,9 +263,9 @@ class SymbolicPKF(object):
                 error = self.fields[field].error
                 sqrt_variance = sympy.sqrt(self.fields[field].variance)
 
-                lhs = Derivative(epsilon, t)
+                lhs = Derivative(epsilon, time_symbol)
 
-                rhs = Derivative(error / sqrt_variance, t).doit()
+                rhs = Derivative(error / sqrt_variance, time_symbol).doit()
                 rhs = rhs.subs(subs_error_trend).doit()
                 rhs = rhs.subs(subs_variance_trend).doit()
                 rhs = rhs.subs(subs_error).doit()
@@ -293,8 +291,7 @@ class SymbolicPKF(object):
             return self._std_system
 
         else:
-            # Compute the std system
-            t = self.time_coordinate
+            # Compute the std system            
 
             subs_variance = {
                 self.fields[field].variance: self.fields[field].std ** Integer(2)
@@ -308,7 +305,7 @@ class SymbolicPKF(object):
                 # Extract trends
                 trends = equation.args[0].atoms(Derivative)
                 for trend in trends:
-                    if t == trend.args[1]:
+                    if time_symbol == trend.args[1]:
                         break
                 equation = equation.isolate(trend)
                 std_system.append(equation)
@@ -359,8 +356,8 @@ class SymbolicPKF(object):
                 V12 = self.internal_closure[Expectation(e1*e2)]
 
                 # 3) Definition and computation of the dynamics
-                lhs = Derivative(V12,t)
-                rhs = Expectation(Derivative(e1*e2,t).doit()).subs(subs_error_trends)
+                lhs = Derivative(V12, time_symbol)
+                rhs = Expectation(Derivative(e1*e2, time_symbol).doit()).subs(subs_error_trends)
                 rhs = rhs.subs(subs_error_to_epsilon).doit()
                 #.. todo ??:
                 #  should include substitution from 'epsilon' in place of 'error'
@@ -380,7 +377,7 @@ class SymbolicPKF(object):
 
         else:
 
-            t = self.time_coordinate
+            #t = self.time_coordinate
 
             subs_epsilon_trends = {
                 eq.args[0]: eq.args[1] for eq in self.epsilon_system
@@ -396,14 +393,14 @@ class SymbolicPKF(object):
                             continue
 
                         # Set the lhs: D_t g_ij
-                        lhs = Derivative(meta_field.metric_func(i,j), t)
+                        lhs = Derivative(meta_field.metric_func(i,j), time_symbol)
 
                         # Compute the rhs: E[ D_t(D_i eps D_j eps)]
                         #  - Definition of the rhs
                         rhs = Expectation(
                                     Derivative(
                                         Derivative(meta_field.epsilon,xi)*Derivative(meta_field.epsilon,xj)
-                                    ,t).doit()
+                                    ,time_symbol).doit()
                                     )
                         # Substitutes the trends of error
                         rhs = rhs.subs(subs_epsilon_trends).doit()
@@ -556,9 +553,7 @@ class SymbolicPKF(object):
 
         """
 
-        if self._system_in_aspect is None:
-
-            t = self.time_coordinate
+        if self._system_in_aspect is None:            
 
             # 1. Set dictionary for substitution
 
@@ -601,18 +596,21 @@ class SymbolicPKF(object):
             # 3. Computation of the system at a symbolic level
             #     forms the equation $$ \pdt \bs = - \bs \pdt g \bs $$
             #     The computation of the system is made as a loop over univariate fields
+
+            #t = self.time_coordinate
+
             for mfield in self.fields.values():
                 # Extract tensors
                 aspect = mfield.aspect
                 metric = mfield.metric
 
                 # Computation of the rhs: $- \bs \pdt g \bs$
-                trend_metric = Derivative(metric, t).doit()
+                trend_metric = Derivative(metric, time_symbol).doit()
                 rhs = - aspect * trend_metric * aspect
                 rhs = rhs.doit()
 
                 # Computation of the lhs: $\pdt \bs$
-                lhs = Derivative(aspect, t).doit()
+                lhs = Derivative(aspect, time_symbol).doit()
 
                 # Set the system by substituting terms
                 for lhs_term, rhs_term in zip(upper_triangle(lhs), upper_triangle(rhs)):
@@ -894,7 +892,7 @@ class Field(object):
         self.code = clean_latex_name(field.func)
 
         self.coordinates = field.args
-        self.spatial_coordinates = tuple([coord for coord in self.coordinates if coord is not t])
+        self.spatial_coordinates = tuple([coord for coord in self.coordinates if coord is not time_symbol])
 
         self.coords_code = tuple(clean_latex_name(coord) for coord in self.coordinates)
         self.spatial_coords_code = tuple(clean_latex_name(coord) for coord in self.spatial_coordinates)
@@ -919,13 +917,13 @@ class Field(object):
 
         # --trends
         self.trends = {
-                    'field':Derivative(self.value,t),
-                    'variance':Derivative(self.variance,t),
-                    'error': Derivative(self.error, t),
-                    'epsilon': Derivative(self.epsilon, t),
-                    'metric': Derivative(self.metric, t),
-                    'diffusion': Derivative(self.diffusion, t),
-                    'aspect': Derivative(self.aspect, t),
+                    'field':Derivative(self.value,time_symbol),
+                    'variance':Derivative(self.variance,time_symbol),
+                    'error': Derivative(self.error, time_symbol),
+                    'epsilon': Derivative(self.epsilon, time_symbol),
+                    'metric': Derivative(self.metric, time_symbol),
+                    'diffusion': Derivative(self.diffusion, time_symbol),
+                    'aspect': Derivative(self.aspect, time_symbol),
         }
 
         self.subs_tree = UnivariateTree(self.epsilon, self.spatial_coordinates)
