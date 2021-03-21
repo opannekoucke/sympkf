@@ -1,5 +1,5 @@
 [SymPKF: a symbolic and computational toolbox for the design of
-univariate parametric Kalman filter dynamics](https://github.com/opannekoucke/sympkf)<!-- omit in toc -->
+parametric Kalman filter dynamics](https://github.com/opannekoucke/sympkf)<!-- omit in toc -->
 ===============================================
 
 
