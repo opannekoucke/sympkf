@@ -77,8 +77,6 @@ The notebook corresponding to the Burgers' dynamics can be found in the `./examp
 
 While SymPKF applies in 1D, it also applies in 2D and 3D domains. As shown in the following two pictures which detail the case of the advection equation.
 
-![](./figures/sympkf_advection-definition.png)            
-
 ![](./figures/sympkf_advection-pkf.png)          
 
 see the corresponding notebooks [PKF for 2D advection](./example/PKF on the 2D advection.ipynb)
@@ -86,7 +84,7 @@ see the corresponding notebooks [PKF for 2D advection](./example/PKF on the 2D a
 
 ### Illustration of the PKF applied on a system of evolution equation
 
-While the present implementation of SymPKF is limited to the univariate statistics, it is possible to start investigating the multivariate situation as shown below.
+The present implementation of SymPKF can also be used to study the dynamic of multivariate situation as shown below.
 
 ![](./figures/sympkf-multivariate.png)
 
