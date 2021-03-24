@@ -71,7 +71,7 @@ An example of numerical simulation performed from the runtime code is given here
 
 ![](./figures/sympkf_burgers-simulation.png)
 
-The notebook corresponding to the Burgers' dynamics can be found in the `./example/` directory [PKF on Burgers](./example/PKF%20on%20Burgers.html) (see the [corresponding source file](./example/PKF%20on%20Burgers.ipynb) ).
+The notebook corresponding to the Burgers' dynamics can be found in the `./example/` directory [PKF on Burgers](./example/PKF%20on%20Burgers.ipynb) (see [pdf file](./example/PKF%20on%20Burgers.pdf) ).
 
 ### PKF for the 2D advection 
 
@@ -79,7 +79,7 @@ While SymPKF applies in 1D, it also applies in 2D and 3D domains. As shown in th
 
 ![](./figures/sympkf_advection-pkf.png)          
 
-see the corresponding notebooks [PKF for 2D advection](./example/PKF%20on%20the%202D%20advection.html) (see the corresponding [source file](./example/PKF%20on%20the%202D%20advection.ipynb). An ensemble validation is also provided as an example, but it relies on a side package `pydap` not published at all [PKF for 2D advection with ensemble validation](./example/PKF%20on%20the%202D%20advection%20with%20ensemble%20validation.html)
+see the corresponding notebooks [PKF for 2D advection](./example/PKF%20on%20the%202D%20advection.ipynb) ([pdf output](./example/PKF%20on%20the%202D%20advection.pdf). An ensemble validation is also provided as an example, but it relies on a side package `pydap` not published [PKF 2D with ensemble validation](./example/PKF%20on%20the%202D%20advection%20with%20ensemble%20validation.ipynb) (see [pdf output](./example/PKF%20on%20the%202D%20advection%20with%20ensemble%20validation.pdf) )
 
 
 ### Illustration of the PKF applied on a system of evolution equation
@@ -88,7 +88,7 @@ The present implementation of SymPKF can also be used to study the dynamic of mu
 
 ![](./figures/sympkf-multivariate.png)
 
-See the corresponding notebooks [PKF for 1D harmonic oscillator](./example/PKF%20on%20the%201D%20multivariate%20oscillator.html) ( see [source file](./example/PKF%20on%20the%201D%20multivariate%20oscillator.ipynb) ) and [PKF for 2D harmonic oscillator](./example/PKF%20on%20the%202D%20multivariate%20oscillator.html) (see [source file](./example/PKF%20on%20the%202D%20multivariate%20oscillator.ipynb))
+See the corresponding notebooks [PKF for 1D harmonic oscillator](./example/PKF%20on%20the%201D%20multivariate%20oscillator.ipynb) ( see [pdf output](./example/PKF%20on%20the%201D%20multivariate%20oscillator.pdf) ) and [PKF for 2D harmonic oscillator](./example/PKF%20on%20the%202D%20multivariate%20oscillator.ipynb) (see [pdf output](./example/PKF%20on%20the%202D%20multivariate%20oscillator.pdf))
 
 
 Note that this example shows that SymPKF can handle a system of partial differential equation.
