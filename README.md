@@ -4,7 +4,7 @@ parametric Kalman filter dynamics](https://github.com/opannekoucke/sympkf)<!-- o
 
 
 - [Introduction](#introduction)
-- [Example](#example)
+- [Examples](#examples)
   - [PKF for the Burgers equation](#pkf-for-the-burgers-equation)
   - [PKF for the 2D advection](#pkf-for-the-2d-advection)
   - [Illustration of the PKF applied on a system of evolution equation](#illustration-of-the-pkf-applied-on-a-system-of-evolution-equation)
@@ -33,8 +33,8 @@ illustrates the potential of SymPKF to go beyond the univariate case.
   - [O. Pannekoucke and P. Arbogast, “SymPKF: a symbolic and computational toolbox for the design of parametric Kalman filter dynamics”  arXiv preprint (2021)](https://arxiv.org/abs/2103.09226).
 
 
-Example
--------
+Examples
+--------
 
 ### PKF for the Burgers equation
 
@@ -59,7 +59,7 @@ To go further, a closure is needed, either from an analytical expression or from
 
 **Automatic code generation for numerical simulations**
 
-To illustrate the potential of using SymPKF, we introduce the closure proposed by [Pannekoucek2018][], and from which a numerical code can be rendered as follows
+To illustrate the potential of using SymPKF, we introduce the closure proposed by [Pannekoucke2018][], and from which a numerical code can be rendered as follows
 
 ![](./figures/sympkf-burgers-code.png)
 
@@ -71,7 +71,7 @@ An example of numerical simulation performed from the runtime code is given here
 
 ![](./figures/sympkf_burgers-simulation.png)
 
-The notebook corresponding to the Burgers' dynamics can be found in the `./example/` directory [Burgers-notebook]('./example/PKF on Burgers.ipynb')
+The notebook corresponding to the Burgers' dynamics can be found in the `./example/` directory [PKF on Burgers](./example/PKF%20on%20Burgers.html) (see the [corresponding source file](./example/PKF%20on%20Burgers.ipynb) ).
 
 ### PKF for the 2D advection 
 
@@ -79,7 +79,7 @@ While SymPKF applies in 1D, it also applies in 2D and 3D domains. As shown in th
 
 ![](./figures/sympkf_advection-pkf.png)          
 
-see the corresponding notebooks [PKF for 2D advection](./example/PKF on the 2D advection.ipynb)
+see the corresponding notebooks [PKF for 2D advection](./example/PKF%20on%20the%202D%20advection.html) (see the corresponding [source file](./example/PKF%20on%20the%202D%20advection.ipynb). An ensemble validation is also provided as an example, but it relies on a side package `pydap` not published at all [PKF for 2D advection with ensemble validation](./example/PKF%20on%20the%202D%20advection%20with%20ensemble%20validation.html)
 
 
 ### Illustration of the PKF applied on a system of evolution equation
@@ -88,7 +88,7 @@ The present implementation of SymPKF can also be used to study the dynamic of mu
 
 ![](./figures/sympkf-multivariate.png)
 
-See the corresponding notebooks [PKF for 1D harmonic oscillator](./example/PKF on the 1D multivariate oscillator.ipynb) and [PKF for 2D harmonic oscillator](./example/PKF on the 2D multivariate oscillator.ipynb)
+See the corresponding notebooks [PKF for 1D harmonic oscillator](./example/PKF%20on%20the%201D%20multivariate%20oscillator.html) ( see [source file](./example/PKF%20on%20the%201D%20multivariate%20oscillator.ipynb) ) and [PKF for 2D harmonic oscillator](./example/PKF%20on%20the%202D%20multivariate%20oscillator.html) (see [source file](./example/PKF%20on%20the%202D%20multivariate%20oscillator.ipynb))
 
 
 Note that this example shows that SymPKF can handle a system of partial differential equation.
@@ -117,4 +117,4 @@ Citation
 
 [Meurer2017]: https://doi.org/10.7717/peerj-cs.103 "A. Meurer et al., “SymPy: symbolic computing in Python,” PeerJ Computer Science, vol. 3, p. e103, Jan. 2017, doi: 10.7717/peerj-cs.103."
 [PDE-NetGen]: https://github.com/opannekoucke/pdenetgen "PDE-NetGen : from symbolic PDE representations of physical processes to trainable neural network representations"
-[Pannekoucek2018]: https://doi.org/10.5194/npg-2018-10 "O. Pannekoucke, M. Bocquet, and R. Ménard, “Parametric covariance dynamics for the nonlinear diffusive Burgers’ equation,” Nonlinear Processes in Geophysics, vol. 2018, pp. 1–21, 2018, doi: https://doi.org/10.5194/npg-2018-10."
+[Pannekoucke2018]: https://doi.org/10.5194/npg-2018-10 "O. Pannekoucke, M. Bocquet, and R. Ménard, “Parametric covariance dynamics for the nonlinear diffusive Burgers’ equation,” Nonlinear Processes in Geophysics, vol. 2018, pp. 1–21, 2018, doi: https://doi.org/10.5194/npg-2018-10."
