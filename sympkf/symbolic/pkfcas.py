@@ -704,6 +704,26 @@ class SymbolicPKF(object):
                 self._internal_closure[Expectation(eps1*eps2)] = V12/(std1*std2)
 
         return self._internal_closure
+    
+    def get_covariance(self, f1, f2):
+        if all([field in self.fields for field in [f1,f2]]):
+            # 1. Get associated metafields
+            mf1 = self.fields[f1]
+            mf2 = self.fields[f2]
+
+            # 2. Selection of the coordinates
+            # .. todo: 
+            #   Modify the selection of the coordinates to account of two-point covariances between surface / volumique fields
+            # this could be made from the cup product of the coordinates mf1.coordinates and mf2.coordinates
+            # e.g. f1(t,x) f2(t,x,y) => V12(t,x,y) ??            
+            cf1 = mf1.coordinates
+            cf2 = mf2.coordinates
+            assert cf1==cf2, ValueError("f1 and f2 have different coordinate system")
+            coordinates = cf1
+
+            return Function('V_'+f1.name+f2.name)(*coordinates)
+        else:
+            raise ValueError("f1 or f2 are not prognostic fields")
 
     @property
     def subs_tree(self):
