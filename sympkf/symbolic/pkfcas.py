@@ -74,6 +74,9 @@ class SymbolicPKF(object):
         # external closure
         self._closure = {} if closure is None else closure
 
+        # Introduce or modify labels for error/normalized error/variance/cross-covariance
+        self._label_covariance = "V_"
+
     def _compute_reynolds_system(self):
         """ Computation of Reynolds system at the second and the first orders
         :return:
@@ -714,7 +717,7 @@ class SymbolicPKF(object):
             assert cf1==cf2, ValueError("f1 and f2 have different coordinate system")
             coordinates = cf1
 
-            return Function('V_'+f1.name+f2.name)(*coordinates)
+            return Function(self._label_covariance+f1.name+f2.name)(*coordinates)
         else:
             raise ValueError("f1 or f2 are not prognostic fields")
 
