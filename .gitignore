@@ -8,8 +8,8 @@ sympkf_*.tgz
 # Documentation
 sympkf/doc_sphinx/*
 
-# local test
-test/
+# local sandbox test
+sandbox/
 
 # build
 build/
