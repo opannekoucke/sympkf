@@ -689,15 +689,8 @@ class SymbolicPKF(object):
 
                 # 3) Definition of the cross_variance
                 
-                # 3.a) Selection of the coordinates
-                # .. todo: 
-                #   Modify the selection of the coordinates to account of two-point covariances between surface / volumique fields
-                # this could be made from the cup product of the coordinates mf1.coordinates and mf2.coordinates
-                # e.g. f1(t,x) f2(t,x,y) => V12(t,x,y) ??
-                coordinates = mf1.coordinates 
-                
-                # 3.b) Set name and definition
-                V12 = Function('V_'+f1.name+f2.name)(*coordinates)
+                # 3.a) Extract he cross covariance label
+                V12 = self.get_covariance(f1,f2)
 
                 # 3.c) Update internal closure
                 self._internal_closure[Expectation(e1*e2)] = V12
