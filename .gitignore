@@ -8,6 +8,9 @@ sympkf_*.tgz
 # Documentation
 sympkf/doc_sphinx/*
 
+# test 
+sandbox/
+
 # build
 build/
 dist/
