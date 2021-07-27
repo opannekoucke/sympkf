@@ -1,5 +1,5 @@
 from unittest import TestCase
-from pydap.symbolic.random import Expectation, omega, israndom
+from sympkf.symbolic.random import Expectation, omega, israndom
 from sympy import Function, Derivative, symbols, I, latex
 
 
