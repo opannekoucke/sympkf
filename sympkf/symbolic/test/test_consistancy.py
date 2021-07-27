@@ -10,8 +10,7 @@ class TestFiniteDifferenceConsistancy(TestCase):
 
     """
 
-    #def test_even_order_derivative_consistancy(self):
-    def test_even(self):        
+    def test_even_order_derivative_consistancy(self):    
         # Set function
         x, dx = symbols('x dx')
         u = Function('u')(x)
