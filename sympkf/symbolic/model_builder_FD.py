@@ -17,7 +17,7 @@ class MetaDerivative(AbstractMetaDerivative):
         from .finite_difference import finite_difference, code_finite_difference
 
         # -1- Transform derivative into regular finite difference
-        finite = finite_difference(self.as_symbolic, regular_grid=True)
+        finite = finite_difference(self.as_symbolic)
 
         # -2- Replace functions and dx's
         code = code_finite_difference(finite.simplify(), self.slice_coding_rule, self.dx_coding_rule)
