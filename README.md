@@ -32,6 +32,14 @@ illustrates the potential of SymPKF to go beyond the univariate case.
 
   - [O. Pannekoucke and P. Arbogast, “SymPKF: a symbolic and computational toolbox for the design of parametric Kalman filter dynamics”  arXiv preprint (2021)](https://arxiv.org/abs/2103.09226).
 
+<div>
+<div style="float:left">
+This work has been supported by the French INSU-LEFE, grant KAPA 
+</div>
+<div>
+<img src="./figures/logo_lefe.png" alt="logo lefe" width="50"/>  
+</div>
+</div>
 
 Examples
 --------

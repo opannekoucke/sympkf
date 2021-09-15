@@ -74,6 +74,9 @@ class SymbolicPKF(object):
         # external closure
         self._closure = {} if closure is None else closure
 
+        # Introduce or modify labels for error/normalized error/variance/cross-covariance
+        self._label_covariance = "V_"
+
     def _compute_reynolds_system(self):
         """ Computation of Reynolds system at the second and the first orders
         :return:
@@ -689,21 +692,34 @@ class SymbolicPKF(object):
 
                 # 3) Definition of the cross_variance
                 
-                # 3.a) Selection of the coordinates
-                # .. todo: 
-                #   Modify the selection of the coordinates to account of two-point covariances between surface / volumique fields
-                # this could be made from the cup product of the coordinates mf1.coordinates and mf2.coordinates
-                # e.g. f1(t,x) f2(t,x,y) => V12(t,x,y) ??
-                coordinates = mf1.coordinates 
-                
-                # 3.b) Set name and definition
-                V12 = Function('V_'+f1.name+f2.name)(*coordinates)
+                # 3.a) Extract he cross covariance label
+                V12 = self.get_covariance(f1,f2)
 
                 # 3.c) Update internal closure
                 self._internal_closure[Expectation(e1*e2)] = V12
                 self._internal_closure[Expectation(eps1*eps2)] = V12/(std1*std2)
 
         return self._internal_closure
+    
+    def get_covariance(self, f1, f2):
+        if all([field in self.fields for field in [f1,f2]]):
+            # 1. Get associated metafields
+            mf1 = self.fields[f1]
+            mf2 = self.fields[f2]
+
+            # 2. Selection of the coordinates
+            # .. todo: 
+            #   Modify the selection of the coordinates to account of two-point covariances between surface / volumique fields
+            # this could be made from the cup product of the coordinates mf1.coordinates and mf2.coordinates
+            # e.g. f1(t,x) f2(t,x,y) => V12(t,x,y) ??            
+            cf1 = mf1.coordinates
+            cf2 = mf2.coordinates
+            assert cf1==cf2, ValueError("f1 and f2 have different coordinate system")
+            coordinates = cf1
+
+            return Function(self._label_covariance+f1.name+f2.name)(*coordinates)
+        else:
+            raise ValueError("f1 or f2 are not prognostic fields")
 
     @property
     def subs_tree(self):
