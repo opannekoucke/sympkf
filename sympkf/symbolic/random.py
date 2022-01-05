@@ -186,10 +186,13 @@ def israndom(arg, verbose=False):
     elif isinstance(arg, sympy.Eq):
         lhs = israndom(arg.args[0], verbose=verbose)
         rhs = israndom(arg.args[1], verbose=verbose)
-        if lhs==rhs:
-            return lhs
-        else:
-            raise IncoherentEquality
+        # Warning : it is possible that lhs!=rhs e.g. 
+        # if rhs is random while lhs is not
+        # example: 
+        #     e(t,x,omega) = 0
+        #   in this case, 'lhs' is random (there is omega) while 'rhs' 
+        #   is deterministic (there is no omega)
+        return any([lhs,rhs])
     elif isinstance(arg, Function):
         lprint('israndom: Function')
         return any( israndom(elm, verbose=verbose) for elm in arg.args )
