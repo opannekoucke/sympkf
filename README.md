@@ -30,7 +30,7 @@ introduced to perform numerical simulations. A final multivariate example
 illustrates the potential of SymPKF to go beyond the univariate case.
 
 
-  - [O. Pannekoucke and P. Arbogast, “SymPKF: a symbolic and computational toolbox for the design of parametric Kalman filter dynamics”  arXiv preprint (2021)](https://arxiv.org/abs/2103.09226).
+  - [O. Pannekoucke and P. Arbogast, “SymPKF (v1.0): a symbolic and computational toolbox for the design of parametric Kalman filter dynamics,” Geoscientific Model Development, vol. 14, no. 10, pp. 5957–5976, Oct. 2021, doi: 10.5194/gmd-14-5957-2021.](https://doi.org/10.5194/gmd-14-5957-2021).
 
 <div>
 <div style="float:left">
@@ -113,13 +113,17 @@ Citation
 --------
 
 ```
- @misc{pannekoucke2021sympkf,
-      title={SymPKF: a symbolic and computational toolbox for the design of parametric Kalman filter dynamics}, 
-      author={Olivier Pannekoucke and Philippe Arbogast},
-      year={2021},
-      eprint={2103.09226},
-      archivePrefix={arXiv},
-      primaryClass={physics.data-an}
+@Article{Pannekoucke2021GMD,
+  author    = {Olivier Pannekoucke and Philippe Arbogast},
+  journal   = {Geoscientific Model Development},
+  title     = {{SymPKF} (v1.0): a symbolic and computational toolbox for the design of parametric Kalman filter dynamics},
+  year      = {2021},
+  month     = {oct},
+  number    = {10},
+  pages     = {5957--5976},
+  volume    = {14},
+  doi       = {10.5194/gmd-14-5957-2021},  
+  publisher = {Copernicus {GmbH}},
 }
 ```
 
