@@ -7,13 +7,13 @@ with open("README.md", "r") as fh:
 if __name__ == "__main__":
     setuptools.setup(
         name="sympkf",
-        version="1.0.0",
+        version="1.0.2",
         author="Olivier Pannekoucke ",
         author_email="olivier.pannekoucke@meteo.fr",
         description="Symbolic Calculation for the Parametric Dynamics",
         long_description=long_description,
         long_description_content_type="text/markdown",
-        url="",
+        url="https://github.com/opannekoucke/sympkf",
         packages=setuptools.find_packages(),
         classifiers=[
             "Programming Language :: Python :: 3",
