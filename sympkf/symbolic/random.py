@@ -112,7 +112,7 @@ class Expectation(Function):
             random = Wild('random', properties=[lambda k: israndom(k)])
 
             out = arg.match(scalar * random)
-            if out[scalar] != S.one:
+            if out[scalar] != S.One:
                 return Mul(out[scalar], cls(out[random]))
             else:
                 return cls(arg, evaluate=False)
