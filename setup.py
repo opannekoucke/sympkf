@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 if __name__ == "__main__":
     setuptools.setup(
         name="sympkf",
-        version="1.0.2",
+        version="1.0.3",
         author="Olivier Pannekoucke ",
         author_email="olivier.pannekoucke@meteo.fr",
         description="Symbolic Calculation for the Parametric Dynamics",
