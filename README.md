@@ -104,6 +104,13 @@ Note that this example shows that SymPKF can handle a system of partial differen
 Install
 -------
 
+### Using pip
+
+A simple way to install `sympkf` is to use pip as follows
+
+`pip install sympkf`
+
+### Using github
  1. Clone the repository `git clone https://github.com/opannekoucke/sympkf.git`
  1. Install the package `make install` (or `python setup.py install`)
  1. Examples are given as jupyter notebooks (see ./example/) 
