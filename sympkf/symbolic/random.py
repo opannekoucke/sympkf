@@ -1,5 +1,5 @@
 import sympy
-from sympy import Symbol, Function, Wild, Add, Mul, Pow, Derivative, Integral
+from sympy import Symbol, Function, Wild, Add, Mul, Pow, Derivative, Integral, S
 from .util import Eq, Matrix
 
 __all__ = [ 'Expectation', 'omega', 'Omega', 'israndom', 'Eq' ]
@@ -112,7 +112,7 @@ class Expectation(Function):
             random = Wild('random', properties=[lambda k: israndom(k)])
 
             out = arg.match(scalar * random)
-            if out[scalar] != 1:
+            if out[scalar] != S.One:
                 return Mul(out[scalar], cls(out[random]))
             else:
                 return cls(arg, evaluate=False)
