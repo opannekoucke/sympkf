@@ -19,7 +19,7 @@ setuptools.setup(
     },                
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: CeCILL License",
+        "License :: CeCILL-B Free Software License Agreement (CECILL-B) ",
         "Operating System :: OS Independent",
     ],
     package_dir={"": "src"},        
