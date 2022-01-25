@@ -87,10 +87,15 @@ class SymbolicPKF(object):
         second_order_reynolds = []
 
         epsilon = symbols('\\varepsilon')
-        subs_reynolds = {
-            field: Expectation(self.fields[field].random) + epsilon * self.fields[field].error
+        subs_reynolds = {            
+            field: Expectation(self.fields[field].random) + epsilon * self.fields[field].error            
             for field in self.fields
         }
+
+        # bug-Expectation-hotfix 5595950431936087884
+        #
+        tmp_func = Function('tmp-func')
+        # /bug
 
         for equation in self.pde_system.equations:
             # 1) Reynolds substitution
@@ -98,7 +103,19 @@ class SymbolicPKF(object):
             lhs, rhs = equation.args
 
             # 2) Calculation of the Second order
+            # bug-Expectation-hotfix 5595950431936087884
+            #
+            rhs = rhs.subs(Expectation, tmp_func)
+            #
+            # / bug
+
             taylor = rhs.series(epsilon, 0, 3).removeO()
+
+            # bug-Expectation-hotfix 5595950431936087884
+            #            
+            taylor = taylor.subs(tmp_func, Expectation)            
+            # /bug
+
             equation = Eq(lhs, taylor).expand()
 
             # 3) Computation of the second-order Taylor's expansion
