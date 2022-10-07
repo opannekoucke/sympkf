@@ -1,7 +1,7 @@
 template = '''
     def __init__(self, shape=None, lengths=None, **kwargs):
 
-        super().__init__() # Time scheme is set from Model.__init__()
+        super().__init__(**kwargs) # Time scheme is set from Model.__init__()
                 
         #---------------------------------
         # Set index array from coordinates
