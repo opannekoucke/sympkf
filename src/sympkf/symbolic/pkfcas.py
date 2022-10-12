@@ -827,10 +827,8 @@ class SymbolicPKF(object):
         unclosed_terms = set()
 
         # -1- Search in variance/metric system
-        systems = [self.variance_system, self.metric_system]
-        for system in systems:
-            for equation in system:
-                unclosed_terms.update(equation.args[1].atoms(Expectation))
+        for equation in self.in_metric:
+            unclosed_terms.update(equation.args[1].atoms(Expectation))
 
         # -2- Eliminates Expectation(field)
         for field,mfield in self.fields.items():
