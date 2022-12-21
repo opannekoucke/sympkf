@@ -138,8 +138,15 @@ class Expectation(Function):
 
     def has(self, *pattern):
         """
-        For Expectation, .has() runs as follow:
-        >>> t = sympy.symbols('t')
+        .has() function for Expectation operator
+
+        This function defers from the usual .has() since it has to handle `omega`. 
+
+        Examples
+        ========
+
+        >>> from sympkf import omega
+        >>> from sympy.abc import t        
         >>> X = Function('X')(t, omega)
         >>> Expectation(X).has(omega)
         False
@@ -149,6 +156,7 @@ class Expectation(Function):
         True        
         >>> Expectation(X).has()
         False
+        
         """
         
         # This function is important to check if an expression is random or not.        
