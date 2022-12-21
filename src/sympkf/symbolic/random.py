@@ -136,13 +136,27 @@ class Expectation(Function):
         else:
             return cls(arg, evaluate=False)
 
-    def _has(self, pattern):
-        # This function is important to check if an expression is random or not.
-        #print(f" ----   _has({pattern})  -----")
-        if isinstance(pattern, Omega):
-            return False
-        else:
-            return self.args[0]._has(pattern)
+    def has(self, *pattern):
+        """
+        For Expectation, .has() runs as follow:
+        >>> t = sympy.symbols('t')
+        >>> X = Function('X')(t, omega)
+        >>> Expectation(X).has(omega)
+        False
+        >>> Expectation(X).has(omega, t)
+        True
+        >>> Expectation(X).has(t)
+        True        
+        >>> Expectation(X).has()
+        False
+        """
+        
+        # This function is important to check if an expression is random or not.        
+        #print(f" ----   has({pattern})  -----")
+        
+        # Eliminate omega from the patterns.
+        pattern = [elm  for elm in pattern if not isinstance(elm, Omega)]        
+        return self.args[0].has(*pattern)
 
     def _latex(self, printer):
         """
@@ -175,13 +189,13 @@ def israndom(arg, verbose=False):
     def lprint(expr):
         if verbose:
             print(expr)
-    if arg.has(omega) is False:
-        # Rule 2.
-        lprint('israndom: check omega')
-        return False
-    elif isinstance(arg, Expectation):
+    if isinstance(arg, Expectation):
         # Rule 1.
         lprint('israndom: Expectation')
+        return False            
+    elif arg.has(omega) is False:
+        # Rule 2.
+        lprint('israndom: check omega')
         return False
     elif isinstance(arg, sympy.Eq):
         lhs = israndom(arg.args[0], verbose=verbose)

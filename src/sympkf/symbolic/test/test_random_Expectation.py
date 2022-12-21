@@ -21,14 +21,14 @@ class TestExpectation(TestCase):
         self.assertEqual(latex(Expectation(X)), '{\\mathbb E}\\left(X{\\left(\\omega \\right)}\\right)')
 
     def test_elementary(self):
-        x, t, omega = symbols('x t omega')
+        x, t = symbols('x t')
         X = Function('X')(x, t, omega)
         dX = Derivative(X, x)
         f = Function('f')(x, t)
         self.assertEqual(Expectation(X * dX * dX), Expectation(X * dX ** 2))
 
     def test_eval(self):
-        x, t, omega = symbols('x t omega')
+        x, t = symbols('x t')
         X = Function('X')(x, t, omega)
         dX = Derivative(X, x)
         f = Function('f')(x, t)

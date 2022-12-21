@@ -1,2 +1,2 @@
-sympy==1.8
-numpy==1.19.2
+sympy==1.10.1
+numpy>=1.19.2
