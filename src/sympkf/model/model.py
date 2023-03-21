@@ -36,7 +36,7 @@ class Model(object):
             (1) Construire un dictionnaire pour les schémas. 
     '''
 
-    def __init__(self, time_scheme='rk4'):
+    def __init__(self, time_scheme='rk4', **kwargs):
         self.time_schemes = { # Coupled time methods
                         'leapfrog':self._leapfrog,
                          # decoupled time methods
