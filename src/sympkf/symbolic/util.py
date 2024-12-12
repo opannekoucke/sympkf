@@ -8,10 +8,6 @@ import sympy
 
 from .constants import t as time_coordinate
 
-# ..todo: remove the following omega by an appropriate import from .random
-#         the present import is used in pdenetgen when the but may be eliminated in futur
-#omega = Symbol('omega')
-
 
 class ScalarSymbol(Symbol):
     """
