@@ -24,8 +24,8 @@ class Expectation(Function):
     ========
 
     >>> from sympy import Function, symbols
-    >>> from sympkf.symbolic import Expectation, omega
-    >>> x, t = symbols('x t')
+    >>> from sympkf.symbolic import Expectation
+    >>> x, t, omega = symbols('x t omega')
     >>> f = Function('f')(x,t)
     >>> X = Function('X')(x,t,omega)
     >>> Expectation(X+f*X, evaluate=False)
