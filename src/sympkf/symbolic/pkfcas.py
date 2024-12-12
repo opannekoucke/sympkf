@@ -1,4 +1,4 @@
-from .random import Expectation, omega
+from .random import Expectation
 from .util import PDESystem, Eq, remove_eval_derivative, upper_triangle
 from .tool import clean_latex_name
 from .constants import t as time_symbol
@@ -8,7 +8,7 @@ import collections
 from sympy import Derivative, symbols, Function, sqrt, Integer, Rational, Mul, Matrix
 import sympy
 
-
+omega = symbols('omega')
 
 #__all__ =['SymbolicPKF','Field','PartialOrderDerivative']
 

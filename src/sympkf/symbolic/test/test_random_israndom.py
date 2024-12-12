@@ -1,12 +1,17 @@
 from unittest import TestCase
-from sympkf.symbolic import Eq, omega, israndom
+#from sympkf.symbolic import Eq, omega, israndom
+from sympkf.symbolic import Eq, israndom
 from sympy import symbols, Function
+
+omega = symbols('omega')
 
 class TestIsRandom(TestCase):
     """
     Test of `israndom`
 
     """
+
+    
 
     def test_Eq(self):
         # Test the case randomness of an equation depending of the 

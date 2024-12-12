@@ -1,7 +1,8 @@
 from unittest import TestCase
-from sympkf.symbolic.random import Expectation, omega, israndom
+from sympkf.symbolic.random import Expectation, israndom
 from sympy import Function, Derivative, symbols, I, latex
 
+omega = symbols('omega')
 
 class TestExpectation(TestCase):
     """
