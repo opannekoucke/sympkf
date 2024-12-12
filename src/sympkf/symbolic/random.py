@@ -2,26 +2,10 @@ import sympy
 from sympy import Symbol, Function, Wild, Add, Mul, Pow, Derivative, Integral, S
 from .util import Eq, Matrix
 
-__all__ = [ 'Expectation', 'omega', 'Omega', 'israndom', 'Eq' ]
+__all__ = [ 'Expectation', 'israndom', 'Eq' ]
 
 
-
-class Omega(Symbol):
-    ''' Random set
-
-    Only one instance of Omega is possible: omega
-    '''
-
-    _instance = 0
-
-    def __new__(cls, name):
-        cls._instance += 1
-        if cls._instance > 1:
-            raise Exception("Two instance of Omega not allowed")
-        else:
-            return super(Omega, cls).__new__(cls, name)
-
-omega = Omega('omega')
+omega = sympy.symbols('omega')
 
 debug = True
 
@@ -163,7 +147,7 @@ class Expectation(Function):
         #print(f" ----   has({pattern})  -----")
         
         # Eliminate omega from the patterns.
-        pattern = [elm  for elm in pattern if not isinstance(elm, Omega)]        
+        pattern = [elm  for elm in pattern if not elm == omega]        
         return self.args[0].has(*pattern)
 
     def _latex(self, printer):
@@ -220,7 +204,7 @@ def israndom(arg, verbose=False):
         return any( israndom(elm, verbose=verbose) for elm in arg.args )
     elif isinstance(arg, Symbol):
         lprint('israndom: Symbol')
-        return isinstance(arg, Omega)
+        return arg == omega
     elif isinstance(arg, (Derivative, Integral)):
         lprint(f'israndom: {type(arg)}')
         return israndom(arg.args[0], verbose=verbose)
