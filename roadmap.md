@@ -10,3 +10,8 @@ Low priority
 ### Refactor tools in `sympkf/symbolic/util.py`
 
  It would be better to separate coordinate/derivative/PDESystem tools from `util.py` in appropriate modules.
+
+
+### Refresh installation routine
+
+ * `setup.py` is no more needed when using `pyproject.toml`

@@ -1,8 +1,5 @@
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel"
-]
+requires = ["setuptools>=42"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -31,10 +28,11 @@ dynamic = [ "version" ]
 dependencies = [
     "sympy==1.13.1",
     "numpy>=1.19.2",
+    "jinja2>=3.0"
 ]
 
 urls.Documentation = "https://github.com/opannekoucke/sympkf/"
 urls.Homepage = "https://github.com/opannekoucke/sympkf/"
-urls.Issues = ""
+urls.Issues = "https://github.com/opannekoucke/sympkf/"
 urls.Repository = "https://github.com/opannekoucke/sympkf/"
 
