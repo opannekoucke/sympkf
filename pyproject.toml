@@ -33,13 +33,6 @@ dependencies = [
     "numpy>=1.19.2",
 ]
 
-optional-dependencies.all = [  ]
-optional-dependencies.dev = [  ]
-
-optional-dependencies.docs = [ ]
-
-optional-dependencies.tests = [ "unittest" ]
-
 urls.Documentation = "https://github.com/opannekoucke/sympkf/"
 urls.Homepage = "https://github.com/opannekoucke/sympkf/"
 urls.Issues = ""
