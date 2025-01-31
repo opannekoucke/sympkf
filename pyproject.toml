@@ -4,3 +4,44 @@ requires = [
     "wheel"
 ]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "sympkf"
+authors = [
+  {name = "Olivier Pannekoucke", email = "olivier.pannekoucke@meteo.fr"},
+]
+maintainers = [
+  {name = "Olivier Pannekoucke", email = "olivier.pannekoucke@meteo.fr"}
+]
+
+description = "Symbolic Calculation for the Parametric Dynamics"
+keywords = [ "data assimilation", "parametric kalman filter", "computer algebra" ]
+
+license = { file = "LICENSE" }
+
+requires-python = ">=3.6"
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: CeCILL-B Free Software License Agreement (CECILL-B) ",
+    "Operating System :: OS Independent",  
+]
+
+dynamic = [ "version" ]
+dependencies = [
+    "sympy==1.13.1",
+    "numpy>=1.19.2",
+]
+
+optional-dependencies.all = [  ]
+optional-dependencies.dev = [  ]
+
+optional-dependencies.docs = [ ]
+
+optional-dependencies.tests = [ "unittest" ]
+
+urls.Documentation = "https://github.com/opannekoucke/sympkf/"
+urls.Homepage = "https://github.com/opannekoucke/sympkf/"
+urls.Issues = ""
+urls.Repository = "https://github.com/opannekoucke/sympkf/"
+
