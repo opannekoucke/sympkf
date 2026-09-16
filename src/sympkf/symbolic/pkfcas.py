@@ -478,10 +478,10 @@ class SymbolicPKF(object):
         Description
         -----------
 
-            The derivation relies on the identity $\nu g = I/2$ whose trend is $(\dot\nu)g+\nu(\dot g)=0$
-            so that $\dot \nu = -\nu(\dot g)g^{-1}$. Again, with $\nu g =I/2$ leading to $g^{-1} = 2\nu$
+            The derivation relies on the identity $\\nu g = I/2$ whose trend is $(\\dot\\nu)g+\\nu(\\dot g)=0$
+            so that $\\dot \\nu = -\\nu(\\dot g)g^{-1}$. Again, with $\\nu g =I/2$ leading to $g^{-1} = 2\\nu$
             it results that
-            $$\dot \nu = -2\nu(\dot g)\nu.$$
+            $$\\dot \\nu = -2\\nu(\\dot g)\\nu.$$
 
         """
 
@@ -564,12 +564,12 @@ class SymbolicPKF(object):
         Description
         -----------
 
-            The derivation relies on the identity $\nu \bs = I$ whose trend is 
-            $(\dot\bs)g+\bs(\dot g)=0$
-            so that $\dot \bs = -\bs(\dot g)g^{-1}$. Again, with $\bs g =I$ 
-            leading to $g^{-1} = \bs$
+            The derivation relies on the identity $\\nu \\bs = I$ whose trend is 
+            $(\\dot\\bs)g+\\bs(\\dot g)=0$
+            so that $\\dot \\bs = -\\bs(\\dot g)g^{-1}$. Again, with $\\bs g =I$ 
+            leading to $g^{-1} = \\bs$
             it results that
-            $$\dot \bs = -\bs(\dot g)\bs.$$
+            $$\\dot \\bs = -\\bs(\\dot g)\\bs.$$
 
         """
 
@@ -838,7 +838,7 @@ class SymbolicPKF(object):
 
 class UnivariateTerm(object):
     """
-    Handle terms in E[ D^alpha \eps D^beta \eps]
+    Handle terms in E[ D^alpha \\eps D^beta \\eps]
     """
 
     """ ..todo ::  details what is univariate terms
@@ -1277,10 +1277,10 @@ class Closure(object):
     written in the aspect tensor approximation (aspect tensor of the correlation 
     approximately equals the local parameter tensor `s` of the correlation)
 
-    \begin{equation}
-    \rho(x,y) = \frac{|s_x|^{1/4}|s_y|^{1/4}}{|\frac{1}{2}(s_x+s_y)|^{1/2}}
-        \exp\left(-||x-y||^2_{(s_x+s_y)^{-1}}\right)
-    \end{equation}
+    \\begin{equation}
+    \\rho(x,y) = \\frac{|s_x|^{1/4}|s_y|^{1/4}}{|\\frac{1}{2}(s_x+s_y)|^{1/2}}
+        \\exp\\left(-||x-y||^2_{(s_x+s_y)^{-1}}\\right)
+    \\end{equation}
     """
 
     def __init__(self, mfield):
@@ -1328,10 +1328,10 @@ class Closure(object):
     def correlation(self, px, py):
         """ Heterogeneous Gaussian correlation function in aspect tensor 
 
-        \begin{equation}
-        \rho(x,y) = \frac{|s_x|^{1/4}|s_y|^{1/4}}{|\frac{1}{2}(s_x+s_y)|^{1/2}}
-            \exp\left(-||x-y||^2_{(s_x+s_y)^{-1}}\right)
-        \end{equation}
+        \\begin{equation}
+        \\rho(x,y) = \\frac{|s_x|^{1/4}|s_y|^{1/4}}{|\\frac{1}{2}(s_x+s_y)|^{1/2}}
+            \\exp\\left(-||x-y||^2_{(s_x+s_y)^{-1}}\\right)
+        \\end{equation}
         
         (see eg Pannekoucke 2021)
         """

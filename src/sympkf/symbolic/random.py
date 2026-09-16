@@ -38,7 +38,7 @@ class Expectation(Function):
     """
 
     nargs = 1
-    _latex_name = '{\mathbb E}'
+    _latex_name = '{\\mathbb E}'
     is_linear = True
 
     def _eval_derivative(self, v):
