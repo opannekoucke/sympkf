@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=42"]
+requires = [ "setuptools>=60", "setuptools-scm>=8" ]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,20 +7,17 @@ name = "sympkf"
 authors = [
   {name = "Olivier Pannekoucke", email = "olivier.pannekoucke@meteo.fr"},
 ]
-maintainers = [
-  {name = "Olivier Pannekoucke", email = "olivier.pannekoucke@meteo.fr"}
-]
 
 description = "Symbolic Calculation for the Parametric Dynamics"
+readme = "README.md"
 keywords = [ "data assimilation", "parametric kalman filter", "computer algebra" ]
 
-license = { file = "LICENSE" }
+license-files = ["CeCILL-B Free Software License Agreement (CECILL-B)", "LICENCE.txt"]
 
 requires-python = ">=3.12"
 
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: CeCILL-B Free Software License Agreement (CECILL-B) ",
+    "Programming Language :: Python :: 3",    
     "Operating System :: OS Independent",  
 ]
 
@@ -38,4 +35,11 @@ urls.Documentation = "https://github.com/opannekoucke/sympkf/"
 urls.Homepage = "https://github.com/opannekoucke/sympkf/"
 urls.Issues = "https://github.com/opannekoucke/sympkf/"
 urls.Repository = "https://github.com/opannekoucke/sympkf/"
+
+[tool.setuptools]
+# 2. On indique à setuptools que le code source se trouve dans le dossier 'src'
+package-dir = { "" = "src" }
+
+[tool.setuptools.dynamic]
+version = {attr = "sympkf.__version__"}
 
