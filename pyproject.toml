@@ -14,7 +14,7 @@ keywords = [ "data assimilation", "parametric kalman filter", "computer algebra"
 
 license-files = ["CeCILL-B Free Software License Agreement (CECILL-B)", "LICENCE.txt"]
 
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 
 classifiers = [
     "Programming Language :: Python :: 3",    
