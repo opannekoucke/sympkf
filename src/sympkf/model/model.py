@@ -156,7 +156,37 @@ class Model(object):
                 state = loc_schema(loc_tendance,time, state, dt)
         return state
 
+
+
+    def forward_mapper(self, state):
+        """Transform the state into the computational state space
+
+        Args:
+            state (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
+        return state
     
+    def backward_mapper(self, state):
+        """Transform the computational state into the state space
+
+        Args:
+            state (_type_): _description_
+
+        Returns:
+            _type_: _description_
+
+        Example:
+
+        Usefull when computation state is in spectral space eg for 
+        Kuramoto-Sivashinsky model
+        
+        """
+        return state
+
+
     def forecast(self, window, u0, saved_times=None):
         """ Time integrates a single state over a time window
 
@@ -166,12 +196,14 @@ class Model(object):
         :return: a dictionary of computed time steps and at saved times.
         """
 
+        u0 = self.forward_mapper(u0)
+
         # Return a dictionary of computed time steps saved time steps over the time forecast_window.
         # update saved_times
         saved_times = self._check_saved_times(window, saved_times)
         traj = {}
         for time, next_time in zip(window[:-1], window[1:]):
-            if time in saved_times: traj[time] = u0
+            if time in saved_times: traj[time] = self.backward_mapper(u0)
             #
             # True for separated time steps.. 
             #
@@ -184,7 +216,7 @@ class Model(object):
             #    return traj
 
         time = window[-1]
-        if time in saved_times: traj[time] = u0
+        if time in saved_times: traj[time] = self.backward_mapper(u0)
         return traj
 
     def predict(self, window, u0, saved_times=None):
@@ -196,12 +228,15 @@ class Model(object):
         :return: an array of computed time steps and at saved times.
         """
 
+        u0 = self.forward_mapper(u0)
+
+
         # Return a dictionnary of computed time steps saved time steps over the time forecast_window.
         # update saved_times
         saved_times = self._check_saved_times(window, saved_times)
         traj = []
         for time, next_time in zip(window[:-1], window[1:]):
-            if time in saved_times: traj.append(u0)
+            if time in saved_times: traj.append(self.backward_mapper(u0))
             #
             # True for separated time steps..
             #
@@ -214,7 +249,7 @@ class Model(object):
             #    return traj
 
         time = window[-1]
-        if time in saved_times: traj.append(u0)
+        if time in saved_times: traj.append(self.backward_mapper(u0))
         return np.array(traj)
 
     def _forecast(self, args):
