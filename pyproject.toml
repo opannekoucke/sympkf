@@ -29,6 +29,7 @@ dependencies = [
     "matplotlib>=3.11.1",
     "pip>=26.2.1",
     "ipykernel>=7.3.0",
+    "tqdm>=4.70.1",
 ]
 
 urls.Documentation = "https://github.com/opannekoucke/sympkf/"

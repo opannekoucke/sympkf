@@ -2,6 +2,7 @@
 # Creation: 20/03/2017
 
 import numpy as np
+from tqdm import tqdm
 
 import multiprocessing
 
@@ -187,7 +188,7 @@ class Model(object):
         return state
 
 
-    def forecast(self, window, u0, saved_times=None):
+    def forecast(self, window, u0, saved_times=None, pbar=False):
         """ Time integrates a single state over a time window
 
         :param window: time window
@@ -202,24 +203,28 @@ class Model(object):
         # update saved_times
         saved_times = self._check_saved_times(window, saved_times)
         traj = {}
-        for time, next_time in zip(window[:-1], window[1:]):
-            if time in saved_times: traj[time] = self.backward_mapper(u0)
-            #
-            # True for separated time steps.. 
-            #
-            dt = next_time - time
-            #try:
-            u1 = self.time_scheme(self.trend, time, u0, dt)
-            u0 = u1
-            #except:
-            #    print(f"An exception occurs in Model.forecast at time {time}")
-            #    return traj
+
+        with tqdm(zip(window[:-1], window[1:]), 
+                  total=len(window), disable=not pbar) as pbar:
+
+            for time, next_time in pbar:
+                if time in saved_times: traj[time] = self.backward_mapper(u0)
+                #
+                # True for separated time steps.. 
+                #
+                dt = next_time - time
+                #try:
+                u1 = self.time_scheme(self.trend, time, u0, dt)
+                u0 = u1
+                #except:
+                #    print(f"An exception occurs in Model.forecast at time {time}")
+                #    return traj
 
         time = window[-1]
         if time in saved_times: traj[time] = self.backward_mapper(u0)
         return traj
 
-    def predict(self, window, u0, saved_times=None):
+    def predict(self, window, u0, saved_times=None, pbar=False):
         """ Time integrates a single state over a time window
 
         :param window: time window
@@ -235,18 +240,22 @@ class Model(object):
         # update saved_times
         saved_times = self._check_saved_times(window, saved_times)
         traj = []
-        for time, next_time in zip(window[:-1], window[1:]):
-            if time in saved_times: traj.append(self.backward_mapper(u0))
-            #
-            # True for separated time steps..
-            #
-            dt = next_time - time
-            #try:
-            u1 = self.time_scheme(self.trend, time, u0, dt)
-            u0 = u1
-            #except:
-            #    print(f"An exception occurs in Model.forecast at time {time}")
-            #    return traj
+        
+        with tqdm(zip(window[:-1], window[1:]), 
+                  total=len(window), disable=not pbar) as pbar:        
+            
+            for time, next_time in pbar:
+                if time in saved_times: traj.append(self.backward_mapper(u0))
+                #
+                # True for separated time steps..
+                #
+                dt = next_time - time
+                #try:
+                u1 = self.time_scheme(self.trend, time, u0, dt)
+                u0 = u1
+                #except:
+                #    print(f"An exception occurs in Model.forecast at time {time}")
+                #    return traj
 
         time = window[-1]
         if time in saved_times: traj.append(self.backward_mapper(u0))
