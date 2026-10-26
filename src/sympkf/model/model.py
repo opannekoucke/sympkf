@@ -310,6 +310,41 @@ class Model(object):
             tl_forecasts[q] = [ (state - forecast[q] )/h for state in tl_forecasts[q] ]
         return forecast, tl_forecasts
     
+    def get_tl_matrix(self, window:np.ndarray|list, state:np.ndarray, h:float=1e-4)->np.ndarray:
+        """Compute the matrix of the tangent-linear operator
+
+        Args:
+            window (np.ndarray | list): time window
+            state (np.ndarray): reference state along which to compute the TL operator
+            h (float, optional): magnitude of the TL approximation. Defaults to 1e-4.
+
+        Description:
+
+            If f(x) denote the forward mapping, the i^th column of the TL approximation
+            if 
+
+                M[:,i] = ( f(x+h d_i) -f(x) ) /h
+
+            where d_i is the Dirac associated with the i^th coordinate.
+
+        Returns:
+            np.ndarray: output matrix of the TL operator.
+        """
+        ref_state = self.predict(window, state, saved_times=window[-1])[-1]
+
+        def dirac(k,n):
+            d = np.zeros(n)
+            d[k] = 1.
+            return d
+        
+        perturbations = ( state + h*dirac(k,self.n) for k in range(self.n) )
+        ensemble = self.ensemble_forecast(window, perturbations, saved_times=window[-1])
+        ensemble = ensemble[window[-1]]
+        tl_matrix = np.zeros( 2*(self.n,) )
+        for k, perturb in enumerate(ensemble):    
+            tl_matrix[:,k] = (perturb - ref_state)/h
+        return tl_matrix    
+    
     def randstate(self):
         '''
         Generate a model state from random initial condition
